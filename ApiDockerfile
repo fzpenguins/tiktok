@@ -1,0 +1,15 @@
+FROM golang:1.21 as builder
+
+# 设置环境变量
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOPROXY=https://goproxy.cn,direct \
+    GOOS=linux \
+    GOARCH=amd64
+
+WORKDIR /tiktok
+COPY . /tiktok
+WORKDIR /tiktok/cmd/api
+RUN go build -o main .
+EXPOSE 8888
+ENTRYPOINT ["./main"]

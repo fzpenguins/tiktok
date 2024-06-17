@@ -1,0 +1,22 @@
+# 第一阶段：构建阶段
+FROM golang:1.21 as builder
+
+# 设置环境变量
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOPROXY=https://goproxy.cn,direct \
+    GOOS=linux \
+    GOARCH=amd64
+
+WORKDIR /tiktok
+
+COPY  config /config
+
+COPY . /tiktok
+WORKDIR /tiktok/cmd/interaction
+
+
+
+RUN ["sh","build.sh"]
+EXPOSE 8883
+ENTRYPOINT ["output/bin/interaction"]

@@ -46,6 +46,7 @@ const (
 	FollowServiceName      = "follow"
 	ChatServiceName        = "chat"
 	VideoServiceName       = "video"
+	PictureServiceName     = "picture"
 )
 
 //rpc
@@ -59,4 +60,9 @@ const (
 	MaxIdleConns    = 10
 	MaxConnections  = 1000
 	ConnMaxLifetime = 10 * time.Second
+)
+
+//milvus
+const (
+	CollectionName = "Images"
 )

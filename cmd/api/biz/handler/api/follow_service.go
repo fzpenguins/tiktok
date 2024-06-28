@@ -4,7 +4,6 @@ package api
 
 import (
 	"context"
-	"github.com/pkg/errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -13,9 +12,12 @@ import (
 	"tiktok/kitex_gen/follow"
 	"tiktok/pkg/utils"
 
+	"github.com/pkg/errors"
+
+	api "tiktok/cmd/api/biz/model/api"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	api "tiktok/cmd/api/biz/model/api"
 )
 
 // Action .

@@ -2,12 +2,13 @@ package main
 
 import (
 	"context"
-	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/pkg/errors"
 	"tiktok/cmd/follow/pack"
 	"tiktok/cmd/follow/service"
 	follow "tiktok/kitex_gen/follow"
 	"tiktok/pkg/errno"
+
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/pkg/errors"
 )
 
 // FollowServiceImpl implements the last service interface defined in the IDL.
@@ -16,7 +17,9 @@ type FollowServiceImpl struct{}
 // Action implements the FollowServiceImpl interface.
 func (s *FollowServiceImpl) Action(ctx context.Context, req *follow.ActionReq) (resp *follow.ActionResp, err error) {
 	// TODO: Your code here...
+
 	resp = new(follow.ActionResp)
+
 	if req.ActionType == "0" {
 		err = service.NewFollowService(ctx).CreateFollow(req)
 	} else if req.ActionType == "1" {

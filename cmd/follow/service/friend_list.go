@@ -1,8 +1,6 @@
 package service
 
 import (
-	"github.com/pkg/errors"
-	"gorm.io/gorm"
 	"log"
 	"strconv"
 	"sync"
@@ -11,6 +9,9 @@ import (
 	"tiktok/cmd/follow/rpc"
 	"tiktok/kitex_gen/follow"
 	"tiktok/pkg/errno"
+
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
 )
 
 func (s *FollowService) FriendList(req *follow.ListFriendReq) (*follow.ListFriendResp, error) {
@@ -19,8 +20,6 @@ func (s *FollowService) FriendList(req *follow.ListFriendReq) (*follow.ListFrien
 	resp.Data = &follow.UserInfoData{}
 
 	offset := req.GetPageNum() * req.GetPageSize()
-
-	log.Println("90909")
 
 	rets, err := cache.FriendListAction(s.ctx, req.Uid)
 	if err != nil {
@@ -44,9 +43,9 @@ func (s *FollowService) FriendList(req *follow.ListFriendReq) (*follow.ListFrien
 			}
 			rets = append(rets, strconv.FormatInt(d.ToUid, 10))
 		}
-		log.Println("two,", rets)
+
 	}
-	log.Println("ret = ", rets)
+
 	if int(offset) >= len(rets) {
 		resp.Data = &follow.UserInfoData{
 			Items: nil,

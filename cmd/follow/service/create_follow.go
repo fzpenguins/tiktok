@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/pkg/errors"
 	"strconv"
 	"tiktok/cmd/follow/dal/cache"
 	"tiktok/cmd/follow/dal/db"
@@ -9,9 +8,12 @@ import (
 	"tiktok/kitex_gen/follow"
 	"tiktok/pkg/errno"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 func (s *FollowService) CreateFollow(req *follow.ActionReq) error {
+
 	uid, _ := strconv.ParseInt(req.Uid, 10, 64)
 	toUid, _ := strconv.ParseInt(req.ToUid, 10, 64)
 	if uid == toUid {

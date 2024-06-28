@@ -47,3 +47,7 @@ var (
 var (
 	JaegerAddr string
 )
+
+var (
+	MilvusAddr string
+)

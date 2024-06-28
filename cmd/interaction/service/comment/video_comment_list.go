@@ -1,8 +1,6 @@
 package comment
 
 import (
-	"github.com/pkg/errors"
-	"log"
 	"strconv"
 	"sync"
 	"tiktok/cmd/interaction/dal/cache"
@@ -10,16 +8,19 @@ import (
 	"tiktok/cmd/interaction/dal/db/dao"
 	"tiktok/kitex_gen/interaction"
 	"tiktok/pkg/errno"
+
+	"github.com/pkg/errors"
 )
 
 func (s *CommentService) VideoCommentList(req *interaction.ListCommentReq) ([]*interaction.Comment, error) {
-	//list := make([]*db.Comment, req.PageSize)
+
 	var list []*db.Comment
 
 	var err error
-	if cache.IsVideoCommentListExist(s.ctx, req.Cid) {
-		rets := cache.GetVideoCommentList(s.ctx, req.GetCid(), req.GetPageSize(), req.GetPageNum())
-		log.Println("rets = ", rets)
+
+	if cache.IsVideoCommentListExist(s.ctx, req.Vid) {
+		rets := cache.GetVideoCommentList(s.ctx, req.GetVid(), req.GetPageSize(), req.GetPageNum())
+
 		if len(rets) == 0 {
 			list, err = dao.NewCommentDao(s.ctx).GetCommentsByVid(req)
 			if err != nil {
@@ -38,7 +39,7 @@ func (s *CommentService) VideoCommentList(req *interaction.ListCommentReq) ([]*i
 	var wg sync.WaitGroup
 	for i, item := range list {
 		wg.Add(1)
-		log.Println("item = ", item)
+
 		go func(item *db.Comment, index int) {
 			defer wg.Done()
 			t := &interaction.Comment{
@@ -51,7 +52,7 @@ func (s *CommentService) VideoCommentList(req *interaction.ListCommentReq) ([]*i
 				UpdatedAt: item.UpdatedAt,
 				DeletedAt: item.DeletedAt,
 			}
-			log.Println("t = ", t)
+
 			t.ChildCount, err = cache.GetChildCommentCount(s.ctx, strconv.FormatInt(item.Cid, 10))
 			if err != nil {
 				return
@@ -64,7 +65,6 @@ func (s *CommentService) VideoCommentList(req *interaction.ListCommentReq) ([]*i
 			}
 
 			comments[index] = t
-			log.Println(index)
 
 		}(item, i)
 

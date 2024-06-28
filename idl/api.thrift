@@ -301,6 +301,55 @@ struct ListFriendResp{
      2: UserInfoData data,
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct Image {
+    1: i64 pid
+    2: string url
+}
+
+
+struct InsertRequest {
+    1: string url
+}
+
+struct InsertResponse {
+    1: Image image,
+    2: BaseResp base;
+}
+
+struct SearchByImageRequest {
+    1: string url
+}
+
+
+struct SearchResponse {
+    1: list<Image> images;
+    2: BaseResp base;
+}
+
+
+struct SearchGoodResp{
+     1: BaseResp base,
+     2: list<Image> images;
+}
+
+
+
+
+
 service UserService{
     RegisterResp Register(1: RegisterReq req) (api.post = "/user/register"),
     LoginResp Login(1: LoginReq req) (api.post = "/user/login"),
@@ -308,6 +357,9 @@ service UserService{
     UploadAvatarUrlResp Upload(1: UploadAvatarUrlReq req) (api.put = "/user/avatar/upload"),
     GetMFAResp GetMFA(1: GetMFAReq req ) (api.get = "/auth/mfa/qrcode"),
     BindMFAResp BindMFA(1: BindMFAReq req) (api.post = "/auth/mfa/bind"),
+
+    InsertResponse Insert(1: InsertRequest req) (api.post="/user/image/insert");
+    SearchResponse SearchByImage(1: SearchByImageRequest req) (api.post="/user/image/search");
 }
 
 service VideoService{
@@ -331,4 +383,7 @@ service FollowService{
     ListFollowingResp ListFollowing(1: ListFollowingReq req) (api.get = "/following/list"),
     ListFollowerResp ListFollower(1: ListFollowerReq req) (api.get = "/follower/list"),
     ListFriendResp ListFriend(1: ListFriendReq req) (api.get = "/friends/list"),
+
 }
+
+

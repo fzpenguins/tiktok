@@ -13,5 +13,6 @@ const (
 	FileUploadErrorCode        = 10009
 	QueryInfoFailed            = 10005
 
-	SetInfoFailed = 10006
+	SetInfoFailed  = 10006
+	TooManyRequest = 10007
 )

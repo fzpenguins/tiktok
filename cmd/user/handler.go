@@ -21,7 +21,7 @@ type UserServiceImpl struct{}
 func (s *UserServiceImpl) Register(ctx context.Context, req *user.RegisterReq) (resp *user.RegisterResp, err error) {
 	// TODO: Your code here...
 	resp = new(user.RegisterResp)
-	log.Println("^^^")
+
 	if len(req.GetUsername()) == 0 || len(req.GetUsername()) > 10 {
 		resp.Base = pack.BuildBaseResp(errno.ParamError)
 		return resp, errors.WithMessage(errno.ParamError, "Username length should be less than 10")

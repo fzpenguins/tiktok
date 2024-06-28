@@ -4,17 +4,17 @@ package api
 
 import (
 	"context"
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/pkg/errors"
 	"log"
 	"net/http"
+	api "tiktok/cmd/api/biz/model/api"
 	"tiktok/cmd/api/biz/pack"
 	"tiktok/cmd/api/biz/rpc"
+	"tiktok/kitex_gen/picture"
 	"tiktok/kitex_gen/user"
 	"tiktok/pkg/utils"
-
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	api "tiktok/cmd/api/biz/model/api"
 )
 
 // Register .
@@ -206,4 +206,65 @@ func BindMFA(ctx context.Context, c *app.RequestContext) {
 
 	resp.Base = pack.GoodResponse()
 	c.JSON(consts.StatusOK, resp)
+}
+
+// Insert .
+// @router /user/image/insert [POST]
+func Insert(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.InsertRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.JSON(http.StatusOK, pack.BadResp())
+		return
+	}
+
+	resp := new(api.InsertResponse)
+	imageResp, err := rpc.InsertImage(ctx, &picture.InsertRequest{req.URL})
+	if err != nil {
+		utils.Logrus.Error(err)
+		log.Println("handler.insert failed, original error:", errors.Cause(err))
+		log.Println("stack trace: ", err)
+		c.JSON(http.StatusOK, pack.BadResp())
+		return
+	}
+
+	resp.Base = pack.GoodResponse()
+	resp.Image = pack.BuildPicture(imageResp.Image)
+	//resp.Image = &api.Image{
+	//	Pid: imageResp.Image.Pid,
+	//	URL: imageResp.Image.Url,
+	//}
+
+	c.JSON(consts.StatusOK, resp)
+}
+
+// SearchByImage .
+// @router /user/image/search [POST]
+func SearchByImage(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req api.SearchByImageRequest
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.JSON(http.StatusOK, pack.BadResp())
+		return
+	}
+
+	resp := new(api.SearchResponse)
+	imagesResp, err := rpc.SearchImage(ctx, &picture.SearchByImageRequest{req.URL})
+	if err != nil {
+		utils.Logrus.Error(err)
+		log.Println("handler.insert failed, original error:", errors.Cause(err))
+		log.Println("stack trace: ", err)
+		c.JSON(http.StatusOK, pack.BadResp())
+		return
+	}
+
+	resp.Base = pack.GoodResponse()
+
+
+	c.JSON(consts.StatusOK, &api.SearchGoodResp{
+		Base:   pack.GoodResponse(),
+		Images: pack.BuildPictures(imagesResp.Images),
+	})
 }

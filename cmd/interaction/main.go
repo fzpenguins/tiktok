@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"net"
-	"net/http"
+
 	"tiktok/cmd/interaction/dal"
 	"tiktok/cmd/interaction/rpc"
 	"tiktok/config"
@@ -11,11 +11,13 @@ import (
 	"tiktok/pkg/constants"
 	"tiktok/pkg/tracer"
 
+	"net/http"
+	_ "net/http/pprof"
+
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	etcd "github.com/kitex-contrib/registry-etcd"
-
 	opentracing "github.com/kitex-contrib/tracer-opentracing"
 )
 
@@ -47,7 +49,7 @@ func main() {
 		server.WithSuite(opentracing.NewDefaultServerSuite()),
 	)
 	go func() {
-		log.Println(http.ListenAndServe("localhost:6062", nil))
+		log.Println(http.ListenAndServe("0.0.0.0:6064", nil))
 	}()
 	err = svr.Run()
 

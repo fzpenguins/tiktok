@@ -160,6 +160,6 @@ func (s *VideoServiceImpl) Info(ctx context.Context, req *video.InfoReq) (resp *
 	}
 	resp.Base = pack.BuildBaseResp(nil)
 	resp.Items = &video.Data{Items: pack.BuildVideos(info)}
-	//resp.Items.Items = pack.BuildVideos(info)
+
 	return
 }

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/pkg/errors"
 	"log"
 	"strconv"
 	"sync"
@@ -10,6 +9,8 @@ import (
 	"tiktok/cmd/follow/rpc"
 	"tiktok/kitex_gen/follow"
 	"tiktok/pkg/errno"
+
+	"github.com/pkg/errors"
 )
 
 func (s *FollowService) FollowList(req *follow.ListFollowingReq) (*follow.ListFollowingResp, error) {
@@ -18,7 +19,6 @@ func (s *FollowService) FollowList(req *follow.ListFollowingReq) (*follow.ListFo
 	resp := new(follow.ListFollowingResp)
 	resp.Data = &follow.UserInfoData{}
 	offset := req.GetPageNum() * req.GetPageSize()
-	log.Println(111111)
 
 	if cache.IsFollowingSetExist(s.ctx, req.Uid) {
 		list, err = cache.GetFollowingList(s.ctx, req.GetPageNum(), req.GetPageSize(), req.GetUid())
@@ -38,7 +38,7 @@ func (s *FollowService) FollowList(req *follow.ListFollowingReq) (*follow.ListFo
 					continue
 				}
 			}
-			log.Println("one")
+
 		}
 	} else {
 		uid, _ := strconv.ParseInt(req.Uid, 10, 64)
@@ -54,12 +54,8 @@ func (s *FollowService) FollowList(req *follow.ListFollowingReq) (*follow.ListFo
 				continue
 			}
 		}
-		log.Println("two")
-	}
-	log.Println(list)
-	log.Println(222)
 
-	log.Println(1)
+	}
 
 	if int(offset) >= len(list) {
 		resp.Data = &follow.UserInfoData{
@@ -87,7 +83,6 @@ func (s *FollowService) FollowList(req *follow.ListFollowingReq) (*follow.ListFo
 			}(l, i)
 		}
 
-		log.Println("i=", l)
 	}
 	wg.Wait()
 	log.Println(resp)

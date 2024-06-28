@@ -42,13 +42,15 @@ func main() {
 	h := server.Default(
 		server.WithHostPorts("0.0.0.0:10001"),
 		server.WithMaxRequestBodySize(419430400),
-		server.WithTracer(prometheus.NewServerTracer(":9091", "/hertz",
+		server.WithTracer(prometheus.NewServerTracer(":19091", "/hertz",
 			prometheus.WithEnableGoCollector(true))),
 		server.WithTracer(hertztracer.NewTracer(tracer, func(c *app.RequestContext) string { return "api.hertz.server" + "::" + c.FullPath() })),
 	)
 
+	h.Use(middleware.SentinelHandleFunc())
 	h.Use(middleware.PrometheusMiddleware())
 	h.Use(hertztracer.ServerCtx())
+
 	h.StaticFS("/data", &app.FS{
 		Root: "usr/local",
 	})

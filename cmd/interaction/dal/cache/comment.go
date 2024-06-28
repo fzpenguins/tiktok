@@ -3,12 +3,13 @@ package cache
 import (
 	"context"
 	"encoding/json"
-	"github.com/redis/go-redis/v9"
 	"log"
 	"strconv"
 	"sync"
 	"tiktok/kitex_gen/interaction"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 func GetVideoCommentCount(ctx context.Context, vid string) (int64, error) {
@@ -49,7 +50,7 @@ func AddIntoChildCommentList(ctx context.Context, c *interaction.Comment, parent
 }
 
 func AddIntoVideoCommentList(ctx context.Context, c *interaction.Comment, vid string) error {
-	log.Println(c)
+
 	m, _ := json.Marshal(c)
 	floatCid, _ := strconv.ParseFloat(c.Cid, 64)
 	tx := RedisClient.TxPipeline()
@@ -72,8 +73,11 @@ func IsChildCommentListExist(ctx context.Context, parentId string) bool {
 }
 
 func IsVideoCommentListExist(ctx context.Context, vid string) bool {
-	ttl := RedisClient.TTL(ctx, VideoCommentListKey(vid)).Val()
-	return ttl > 0
+	exists := RedisClient.Exists(ctx, VideoCommentListKey(vid)).Val()
+
+	return exists > 0
+	// ttl := RedisClient.TTL(ctx, VideoCommentListKey(vid)).Val()
+	// return ttl > 0
 }
 
 func DeleteAllItemInChildCommentList(ctx context.Context, parentId string) error {
@@ -89,7 +93,7 @@ func GetChildCommentList(ctx context.Context, parentId string, pageSize, pageNum
 	if err != nil {
 		return nil
 	}
-	log.Println(members, "members")
+
 	resp := make([]*interaction.Comment, len(members))
 	var wg sync.WaitGroup
 	start := pageNum * pageSize
@@ -114,7 +118,7 @@ func GetVideoCommentList(ctx context.Context, vid string, pageSize, pageNum int6
 	if err != nil {
 		return nil
 	}
-	log.Println("members = ", members)
+
 	resp := make([]*interaction.Comment, len(members))
 	var wg sync.WaitGroup
 	start := pageNum * pageSize
@@ -127,7 +131,7 @@ func GetVideoCommentList(ctx context.Context, vid string, pageSize, pageNum int6
 			if err != nil {
 				return
 			}
-			log.Println("c = ", c)
+
 			resp[index] = c
 		}(i)
 	}

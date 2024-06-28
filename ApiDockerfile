@@ -11,5 +11,5 @@ WORKDIR /tiktok
 COPY . /tiktok
 WORKDIR /tiktok/cmd/api
 RUN go build -o main .
-EXPOSE 8888
+# EXPOSE 8888
 ENTRYPOINT ["./main"]

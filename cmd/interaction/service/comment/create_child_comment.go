@@ -1,9 +1,6 @@
 package comment
 
 import (
-	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/pkg/errors"
-	"golang.org/x/sync/errgroup"
 	"strconv"
 	"tiktok/cmd/interaction/dal/cache"
 	"tiktok/cmd/interaction/dal/db"
@@ -11,6 +8,10 @@ import (
 	"tiktok/kitex_gen/interaction"
 	"tiktok/pkg/errno"
 	"time"
+
+	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/pkg/errors"
+	"golang.org/x/sync/errgroup"
 )
 
 func (s *CommentService) CreateChildComment(req *interaction.PublishCommentReq) error {
@@ -55,18 +56,7 @@ func (s *CommentService) CreateChildComment(req *interaction.PublishCommentReq) 
 		err := cache.AddChildCommentCount(ctx, req.Cid, strconv.FormatInt(c.Cid, 10))
 		return errors.WithMessage(err, errno.CreateFailed)
 	})
-	eg.Go(func() error {
-		defer func() {
-			if e := recover(); e != nil {
-				klog.Error(e)
-			}
-		}()
-		if cache.IsChildCommentListExist(ctx, req.Cid) {
-			err := cache.DeleteAllItemInChildCommentList(ctx, req.Cid)
-			return errors.WithMessage(err, errno.DeleteError)
-		}
-		return nil
-	})
+
 	if err := eg.Wait(); err != nil {
 		return errors.WithMessage(err, errno.CreateFailed)
 	}

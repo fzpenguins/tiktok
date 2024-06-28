@@ -1,9 +1,6 @@
 package like
 
 import (
-	"github.com/pkg/errors"
-	"github.com/redis/go-redis/v9"
-	"log"
 	"strconv"
 	"sync"
 	"tiktok/cmd/interaction/dal/cache"
@@ -11,6 +8,9 @@ import (
 	"tiktok/kitex_gen/interaction"
 	"tiktok/kitex_gen/video"
 	"tiktok/pkg/errno"
+
+	"github.com/pkg/errors"
+	"github.com/redis/go-redis/v9"
 )
 
 func (s *LikeService) ListLikeVideo(req *interaction.ListLikeReq) (resp []*video.Video, err error) {
@@ -38,7 +38,7 @@ func (s *LikeService) ListLikeVideo(req *interaction.ListLikeReq) (resp []*video
 		if int64(pos) >= req.GetPageNum()*req.GetPageSize() {
 			break
 		}
-		log.Println("pos=", pos)
+
 	}
 
 	var vids []int64
@@ -48,7 +48,7 @@ func (s *LikeService) ListLikeVideo(req *interaction.ListLikeReq) (resp []*video
 		c, _ := strconv.ParseInt(v, 10, 64)
 		vids = append(vids, c)
 	}
-	log.Println("vids=", vids)
+
 	ret, err := rpc.GetVideoInfo(s.ctx, vids)
 	if err != nil {
 		return nil, errors.WithMessage(err, errno.GetInfoError)
@@ -69,7 +69,7 @@ func (s *LikeService) ListLikeVideo(req *interaction.ListLikeReq) (resp []*video
 				UpdatedAt:   value.UpdatedAt,
 				DeletedAt:   value.DeletedAt,
 			}
-			log.Println("vinfo=", vinfo)
+
 			t, err := s.GetVideoInfo(&interaction.GetVideoInfoRequest{Vid: strconv.FormatInt(value.Vid, 10)})
 			if err != nil {
 				return

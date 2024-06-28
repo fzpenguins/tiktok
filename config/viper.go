@@ -53,6 +53,8 @@ func InitConfig() {
 	EtcdAddr = viper.GetString("etcd.addr")
 
 	JaegerAddr = viper.GetString("jaeger.addr")
+
+	MilvusAddr = viper.GetString("milvus.addr")
 }
 
 //func WatchConfig() {

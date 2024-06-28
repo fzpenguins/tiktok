@@ -20,7 +20,7 @@ func (s *VideoService) Search(req *video.SearchReq) ([]*db.Video, int64, error) 
 	queryDao.DB = queryDao.GetVideoByKeyword(req.Keywords)
 
 	if req.GetUsername() != "" {
-		uid, err := cache.GetUid(s.ctx, req) //这里有问题
+		uid, err := cache.GetUid(s.ctx, req)
 		if err != nil {
 			return nil, 0, errors.WithMessage(err, errno.ParseFailed)
 		}

@@ -166,3 +166,18 @@ func _searchMw() []app.HandlerFunc {
 	// your code...
 	return []app.HandlerFunc{middleware.AuthMiddleware()}
 }
+
+func _imageMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _insertMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}
+
+func _searchbyimageMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

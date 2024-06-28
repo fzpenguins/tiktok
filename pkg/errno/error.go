@@ -21,4 +21,6 @@ var (
 
 	FollowSelfError    = NewErrNo(ParamErrorCode, "can not follow self")
 	FollowExistedError = NewErrNo(ParamErrorCode, "follow exist")
+
+	TooManyRequestError = NewErrNo(TooManyRequest, "too many request")
 )

@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/pkg/errors"
-	"log"
 	"tiktok/cmd/video/dal/db/dao"
 	"tiktok/kitex_gen/video"
 	"tiktok/pkg/errno"
+
+	"github.com/pkg/errors"
 )
 
 func (s *VideoService) GetPublishList(req *video.ListReq) (list []*video.Video, cnt int64, err error) {
@@ -23,8 +23,8 @@ func (s *VideoService) GetPublishList(req *video.ListReq) (list []*video.Video, 
 			return nil, 0, errors.WithMessage(err, errno.GetInfoError)
 		}
 		list[i] = videoInfo
-		log.Println("333", videoInfo)
+
 	}
-	log.Println("list = ", list, "len = ?", len(videos))
+
 	return list, cnt, nil
 }

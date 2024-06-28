@@ -2,9 +2,10 @@ package dao
 
 import (
 	"context"
-	"gorm.io/gorm"
 	"tiktok/cmd/follow/dal/db"
 	"tiktok/pkg/errno"
+
+	"gorm.io/gorm"
 )
 
 type FollowDao struct {
@@ -42,10 +43,6 @@ func (dao *FollowDao) GetFollower(toUid int64) ([]*db.Follow, error) {
 	err := dao.DB.Model(&db.Follow{}).Where("to_uid = ?", toUid).Find(&list).Error
 	return list, err
 }
-
-//func (dao *FollowDao) GetFriends(fromUid, toUid string) {
-//	dao.DB.Model(&db.Follow{}).Where("to_uid = ? AND from_uid = ?", toUid, fromUid)
-//}
 
 func (dao *FollowDao) IsFollowerExist(fromUid, toUid int64) error {
 	var cnt int64

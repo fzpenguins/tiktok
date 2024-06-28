@@ -1,7 +1,6 @@
 package service
 
 import (
-	"log"
 	"tiktok/cmd/user/dal/cache"
 	"tiktok/cmd/user/dal/db"
 	"tiktok/cmd/user/dal/db/dao"
@@ -18,7 +17,7 @@ func (s *UserService) Register(req *user.RegisterReq) (*db.User, error) {
 		Username: req.Username,
 		Password: req.Password,
 	}
-	log.Println("***")
+
 	_, err := dao.NewUserDao(s.ctx).FindUserByName(req.Username)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = userModel.SetPassword(req.Password)

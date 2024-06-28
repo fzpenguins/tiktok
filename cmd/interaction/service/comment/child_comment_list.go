@@ -1,7 +1,6 @@
 package comment
 
 import (
-	"github.com/pkg/errors"
 	"strconv"
 	"sync"
 	"tiktok/cmd/interaction/dal/cache"
@@ -9,10 +8,12 @@ import (
 	"tiktok/cmd/interaction/dal/db/dao"
 	"tiktok/kitex_gen/interaction"
 	"tiktok/pkg/errno"
+
+	"github.com/pkg/errors"
 )
 
 func (s *CommentService) ChildCommentList(req *interaction.ListCommentReq) ([]*interaction.Comment, error) {
-	//list := make([]*db.Comment, req.PageSize)
+
 	var list []*db.Comment
 
 	var err error
@@ -61,7 +62,7 @@ func (s *CommentService) ChildCommentList(req *interaction.ListCommentReq) ([]*i
 			}
 
 			comments[index] = t
-			return
+
 		}(item, i)
 	}
 

@@ -11,6 +11,9 @@ ENV GO111MODULE=on \
 
 WORKDIR /tiktok
 
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY  config /config
 
 COPY . /tiktok
@@ -19,7 +22,7 @@ WORKDIR /tiktok/cmd/user
 
 
 RUN ["sh","build.sh"]
-EXPOSE 8881
+# EXPOSE 8881
 ENTRYPOINT ["output/bin/user"]
 
 

@@ -1,7 +1,7 @@
 package db
 
 type Follow struct {
-	Fid       int64  `json:"fid" gorm:"primaryKey"`
+	Fid       int64  `json:"fid" gorm:"primaryKey;autoincrement"`
 	FromUid   int64  `json:"from_uid"`
 	ToUid     int64  `json:"to_uid"`
 	CreatedAt string `json:"created_at"`

@@ -61,6 +61,11 @@ func Register(r *server.Hertz) {
 			_avatar := _user.Group("/avatar", _avatarMw()...)
 			_avatar.PUT("/upload", append(_uploadMw(), api.Upload)...)
 		}
+		{
+			_image := _user.Group("/image", _imageMw()...)
+			_image.POST("/insert", append(_insertMw(), api.Insert)...)
+			_image.POST("/search", append(_searchbyimageMw(), api.SearchByImage)...)
+		}
 	}
 	{
 		_video := root.Group("/video", _videoMw()...)
